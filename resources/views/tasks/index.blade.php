@@ -39,6 +39,9 @@
                     <h1>Welcome to the tasklist</h1>
                     {{-- ユーザ登録ページへのリンク --}}
                     {!! link_to_route('signup.get', 'Sign up now!', [], ['class' => 'btn btn-lg btn-primary']) !!}
+                    
+                     {{-- ユーザ登録ページへのリンク --}}
+                    {!! link_to_route('login.post', 'Login', [], ['class' => 'btn btn-lg btn-success']) !!}
                 </div>
             </div>
     @endif
