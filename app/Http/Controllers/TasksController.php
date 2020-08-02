@@ -33,11 +33,15 @@ class TasksController extends Controller
     public function create()
     {
         $task = new Task;
-
-        // タスク作成ビューを表示
-        return view('tasks.create', [
+        if (\Auth::check()) { // 認証済みの場合
+            // タスク作成ビューを表示
+            return view('tasks.create', [
             'task' => $task,
-        ]);
+            ]);
+        }
+        
+        // トップページへリダイレクトさせる
+        return redirect('/');
     }
 
     // postでtasks/にアクセスされた場合の「新規登録処理」
@@ -55,7 +59,6 @@ class TasksController extends Controller
             'status' => $request->status
         ]);
 
-
         // トップページへリダイレクトさせる
         return redirect('/');
     }
@@ -65,23 +68,33 @@ class TasksController extends Controller
     {
         // idの値でタスクを検索して取得
         $task = Task::findOrFail($id);
-
-        // タスク詳細ビューでそれを表示
-        return view('tasks.show', [
+        
+        if (\Auth::id() === $task->user_id) {
+            // タスク詳細ビューでそれを表示
+            return view('tasks.show', [
             'task' => $task,
-        ]);
+            ]);
+        }
+        
+        //トップページへリダイレクトさせる
+        return redirect('/');
     }
-
+    
     // getでtasks/（任意のid）/editにアクセスされた場合の「更新画面表示処理」
     public function edit($id)
     {
         // idの値でタスクを検索して取得
         $task = Task::findOrFail($id);
 
-        // タスク編集ビューでそれを表示
-        return view('tasks.edit', [
+        if (\Auth::id() === $task->user_id) {
+            // タスク編集ビューでそれを表示
+            return view('tasks.edit', [
             'task' => $task,
-        ]);
+            ]);
+        }
+        
+        //トップページへリダイレクトさせる
+        return redirect('/');
     }
 
     // putまたはpatchでtasks/（任意のid）にアクセスされた場合の「更新処理」
